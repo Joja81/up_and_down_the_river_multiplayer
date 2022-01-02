@@ -181,3 +181,22 @@ Playing API calls (all start with "play/")
 	- None
 
 	InputError if not in playing stage or not user turn
+
+Results API calls ("result")
+
+-var result
+	- name (String)
+	- score (Integer)
+	- change (Integer)
+	- is_user
+	
+
+- get_curr_results(Get)
+	Gives list of results for users
+
+	Input
+	- token
+	
+	Output
+	-results [result]
+	-game_finished

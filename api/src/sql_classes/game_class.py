@@ -13,8 +13,10 @@ class Game(Base):
 
         max_cards = Column(Integer)
 
-        game_stage = Column(String(1)) # Stage of game, 'S' = starting, 'G' = guessing, 'P' = playing, 'F' = finished
+        game_stage = Column(String(1)) # Stage of game, 'S' = starting, 'G' = guessing, 'P' = playing, 'R' = Results, 'F' = Finished
 
         round_num = Column(Integer)
 
         card_num = Column(Integer)
+
+        finished = Column(Boolean, default=False)

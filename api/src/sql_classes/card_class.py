@@ -20,3 +20,6 @@ class Card(Base):
 
         play_id = Column(Integer, ForeignKey("plays.id"))
         play = relationship("Play")
+
+        round_id = Column(Integer, ForeignKey("rounds.id"))
+        round = relationship("Round")

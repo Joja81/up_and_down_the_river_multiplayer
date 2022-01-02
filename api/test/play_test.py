@@ -1,14 +1,15 @@
-'''
-            ========================================================
-                            get_curr_cards tests
-            ========================================================
-'''
 
 import json
 import requests
 from requests.api import request
 
 from src import config
+
+'''
+            ========================================================
+                            get_curr_cards tests
+            ========================================================
+'''
 
 
 def test_get_curr_card_invalid_token():
@@ -274,7 +275,7 @@ def test_give_play_invalid_token():
 
     card = {'suit' : 'C', 'rank' : '2'}
 
-    resp = requests.post(config.url + "play/get_curr_wins", json= {'token' : 1, 'play' : card})
+    resp = requests.post(config.url + "play/give_play", json= {'token' : 1, 'play' : card})
 
     assert resp.status_code == 403
 
@@ -302,21 +303,21 @@ def test_give_play_invalid_stage():
 
     user_token = data['token']
 
-    resp = requests.post(config.url + "play/get_curr_wins", json= {'token' : owner_token, 'play' : card})
+    resp = requests.post(config.url + "play/give_play", json= {'token' : owner_token, 'play' : card})
 
     assert resp.status_code == 400
 
-    resp = requests.post(config.url + "play/get_curr_wins", json= {'token' : user_token, 'play' : card})
+    resp = requests.post(config.url + "play/give_play", json= {'token' : user_token, 'play' : card})
 
     assert resp.status_code == 400
 
     requests.post(config.url + "start/start_game", json={"token" : owner_token})
 
-    resp = requests.post(config.url + "play/get_curr_wins", json= {'token' : owner_token, 'play' : card})
+    resp = requests.post(config.url + "play/give_play", json= {'token' : owner_token, 'play' : card})
 
     assert resp.status_code == 400
 
-    resp = requests.post(config.url + "play/get_curr_wins", json= {'token' : user_token, 'play' : card})
+    resp = requests.post(config.url + "play/give_play", json= {'token' : user_token, 'play' : card})
 
     assert resp.status_code == 400
 
@@ -329,7 +330,7 @@ def test_give_card_working():
     resp = requests.get(config.url + "play/get_curr_cards", params= {'token' : user_token})
     cards_2 = json.loads(resp.text)['cards'][0]
 
-    resp = requests.get(config.url + "play/give_play", json = {'token' : user_token, 'card' : cards_2})
+    resp = requests.post(config.url + "play/give_play", json = {'token' : user_token, 'play' : cards_2})
 
     assert resp.status_code == 200
 
@@ -357,11 +358,13 @@ def test_give_card_working():
     assert data['is_player_turn'] == False
     assert data['is_finished'] == False
 
-    resp = requests.get(config.url + "play/give_play", json = {'token' : owner_token, 'card' : cards_2})
+    resp = requests.post(config.url + "play/give_play", json = {'token' : owner_token, 'play' : cards_2})
 
     assert resp.status_code == 400
 
-    resp = requests.get(config.url + "play/give_play", json = {'token' : owner_token, 'card' : cards_1})
+    resp = requests.post(config.url + "play/give_play", json = {'token' : owner_token, 'play' : cards_1})
+
+    assert resp.status_code == 200
 
     resp = requests.get(config.url + "play/get_current_play", params= {'token' : owner_token})
 

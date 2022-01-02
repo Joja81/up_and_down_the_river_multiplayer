@@ -1,8 +1,5 @@
-
 import json
 import requests
-from sqlalchemy.sql.functions import user
-from werkzeug.exceptions import TooManyRequests
 
 from src import config
 

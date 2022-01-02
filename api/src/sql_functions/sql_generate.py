@@ -16,6 +16,7 @@ def generate_engine():
     from src.sql_classes.hand_class import Hand
     from src.sql_classes.card_class import Card
     from src.sql_classes.play_class import Play
+    from src.sql_classes.round_points_class import Round_point
 
     # Create relationships
     User.sessions = relationship("User_session", order_by=User_session.id)
@@ -34,6 +35,9 @@ def generate_engine():
 
     Game.plays = relationship("Play", order_by=Play.id)
     Round.plays = relationship("Play", order_by=Play.play_num)
+
+    Round.round_points = relationship("Round_point", order_by=Round_point.id)
+    User.round_points = relationship("Round_point", order_by=Round_point.id)
 
     # Create engine
     engine = create_engine("sqlite:///up_and_down_the_river.db")

@@ -11,7 +11,8 @@ from sqlalchemy.orm.session import Session
 
 from src import config
 from src.guess import collect_cards, get_guesses, give_guess
-from src.play import get_curr_cards, get_current_play
+from src.play import get_curr_cards, get_curr_wins, get_current_play, give_play
+from src.result import get_curr_results
 from src.sql_functions.base import Base
 from src.sql_functions.sql_generate import generate_engine
 from src.start import change_num_cards, create_new_game, join_game, start_game, update_start_screen
@@ -148,6 +149,32 @@ def play_get_current_play():
     auth_user_id = token_check(token, session)
 
     return json.dumps(get_current_play(auth_user_id, session))
+
+@APP.route("/play/get_curr_wins", methods = ['GET'])
+def play_get_curr_wins():
+    token = request.args.get('token')
+
+    auth_user_id = token_check(token, session)
+
+    return json.dumps(get_curr_wins(auth_user_id, session))
+
+@APP.route("/play/give_play", methods = ["POST"])
+def play_give_play():
+    data = request.get_json()
+
+    auth_user_id = token_check(data['token'], session)
+
+    return json.dumps(give_play(auth_user_id, data['play'], session))
+
+# Results routs
+@APP.route("/result/get_curr_results", methods = ['GET'])
+def result_get_curr_results():
+    token = request.args.get('token')
+
+    auth_user_id = token_check(token, session)
+
+    return json.dumps(get_curr_results(auth_user_id, session))
+
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
