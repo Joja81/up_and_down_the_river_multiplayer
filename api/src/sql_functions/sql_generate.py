@@ -1,11 +1,12 @@
 from sqlalchemy.engine import create_engine
 from sqlalchemy.orm import relation, relationship
 from src.sql_functions.base import Base
-
  
 def generate_engine():  
     """Creates engine and loads database classes and returns engine"""
-   
+    
+    global engine_store
+
     # Load classes for DB
 
     from src.sql_classes.game_class import Game

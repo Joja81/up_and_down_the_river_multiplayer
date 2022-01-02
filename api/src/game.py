@@ -1,17 +1,19 @@
 import random
+import threading
 
 from sqlalchemy.orm.session import Session
 from src.sql_classes.card_class import Card
+from src.sql_classes.game_class import Game
 from src.sql_classes.hand_class import Hand
 from src.sql_classes.play_class import Play
 from src.sql_classes.round_class import Round
 from src.sql_classes.round_points_class import Round_point
 from src.sql_classes.user_class import User
-from src.sql_functions.sql_generate import generate_engine
 
 suits = ['C', 'D', 'H', 'S']
 ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
+END_ROUND_WAIT_TIME = 2 #Time until next round starts
 
 def users_in_game(game, session):
     '''Returns a list of names of users in the game'''
@@ -61,6 +63,28 @@ def generate_round(game, session):
 
     session.commit()
 
+def prepare_new_round(game, engine):
+
+    print(engine)
+
+    session = Session(engine)
+
+    if game.round_num >= game.max_cards:
+        game.card_num -= 1
+    else:
+        game.card_num += 1
+    
+    game.round_num += 1
+
+    game.game_stage = "G"
+
+    generate_round(game, session)
+
+    session.commit()
+
+    session.close()
+
+
 def generate_card_list():
     '''Returns list of cards'''
 
@@ -79,9 +103,7 @@ def start_play(game, curr_round, session):
     session.add(new_play)
     session.commit()
 
-def next_play(game, curr_round):
-
-    engine = generate_engine()
+def next_play(game, curr_round, engine):
 
     session = Session(engine)
 
@@ -96,7 +118,7 @@ def next_play(game, curr_round):
 
     session.close()
 
-def end_round(curr_round, game, session):
+def end_round(curr_round, game, session, engine):
     calculate_score(curr_round, game, session)
 
     if game.round_num == (game.max_cards * 2 - 1):
@@ -104,8 +126,10 @@ def end_round(curr_round, game, session):
         #TODO Add thread to delete record after 24 hours
     else:
         game.game_stage = "R"
-        #TODO Add thread to move to next round
+        print("start")
+        t = threading.Timer(END_ROUND_WAIT_TIME, prepare_new_round, [game, engine])
     
+    t.start()
     session.commit()
 
 

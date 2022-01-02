@@ -8,6 +8,8 @@ from src.error import InputError
 from src.game import end_round, next_play, ranks
 import threading as th
 
+NEXT_PLAY_WAIT_TIME = 2
+
 def get_curr_cards(auth_user_id, session):
     user = session.query(User).get(auth_user_id)
     game = user.game
@@ -70,7 +72,7 @@ def get_curr_wins(auth_user_id, session):
     
     return {'scores' : scores}
 
-def give_play(auth_user_id, chosen_card, session):
+def give_play(auth_user_id, chosen_card, session, engine):
     user = session.query(User).get(auth_user_id)
     game = user.game
 
@@ -127,9 +129,9 @@ def give_play(auth_user_id, chosen_card, session):
         play.completed = True
 
         if play.play_num < curr_round.card_num:
-            th.Timer(5, next_play, [game, curr_round])
+            th.Timer(NEXT_PLAY_WAIT_TIME, next_play, [game, curr_round, engine])
         else:
-            end_round(curr_round, game, session)
+            end_round(curr_round, game, session, engine)
     else:
         next_user = session.query(User).filter(User.game == game, User.play_order == user.play_order + 1).first()
 

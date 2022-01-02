@@ -164,7 +164,7 @@ def play_give_play():
 
     auth_user_id = token_check(data['token'], session)
 
-    return json.dumps(give_play(auth_user_id, data['play'], session))
+    return json.dumps(give_play(auth_user_id, data['play'], session, engine))
 
 # Results routs
 @APP.route("/result/get_curr_results", methods = ['GET'])
