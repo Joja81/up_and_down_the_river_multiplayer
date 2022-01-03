@@ -129,7 +129,8 @@ def give_play(auth_user_id, chosen_card, session, engine):
         play.completed = True
 
         if play.play_num < curr_round.card_num:
-            th.Timer(NEXT_PLAY_WAIT_TIME, next_play, [game, curr_round, engine])
+            t = th.Timer(NEXT_PLAY_WAIT_TIME, next_play, [game.id, curr_round.id, engine])
+            t.start()
         else:
             end_round(curr_round, game, session, engine)
     else:

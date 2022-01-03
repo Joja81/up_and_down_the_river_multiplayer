@@ -14,6 +14,7 @@ suits = ['C', 'D', 'H', 'S']
 ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 
 END_ROUND_WAIT_TIME = 2 #Time until next round starts
+END_GAME_WAIT_TIME = 100 # Time until game is wiped from db
 
 def users_in_game(game, session):
     '''Returns a list of names of users in the game'''
@@ -63,11 +64,11 @@ def generate_round(game, session):
 
     session.commit()
 
-def prepare_new_round(game, engine):
-
-    print(engine)
+def prepare_new_round(game_id, engine):
 
     session = Session(engine)
+
+    game = session.query(Game).get(game_id)
 
     if game.round_num >= game.max_cards:
         game.card_num -= 1
@@ -103,15 +104,19 @@ def start_play(game, curr_round, session):
     session.add(new_play)
     session.commit()
 
-def next_play(game, curr_round, engine):
+def next_play(game_id, round_id, engine):
 
     session = Session(engine)
+
+    game = session.query(Game).get(game_id)
+
+    curr_round = session.query(Round).get(round_id)
 
     play = session.query(Play).filter(Play.round == curr_round).order_by(Play.play_num.desc()).first()
 
     start_player = play.winner
 
-    new_play = Play(play_num = len(round.plays) + 1, current_user = start_player, round = curr_round, game = game)
+    new_play = Play(play_num = len(curr_round.plays) + 1, current_user = start_player, round = curr_round, game = game)
 
     session.add(new_play)
     session.commit()
@@ -119,21 +124,20 @@ def next_play(game, curr_round, engine):
     session.close()
 
 def end_round(curr_round, game, session, engine):
-    calculate_score(curr_round, game, session)
+    calculate_score(curr_round, session)
 
     if game.round_num == (game.max_cards * 2 - 1):
         game.game_stage = "F"
-        #TODO Add thread to delete record after 24 hours
+        t = threading.Timer(END_GAME_WAIT_TIME, clear_game, [game.id, engine])
     else:
         game.game_stage = "R"
-        print("start")
-        t = threading.Timer(END_ROUND_WAIT_TIME, prepare_new_round, [game, engine])
+        t = threading.Timer(END_ROUND_WAIT_TIME, prepare_new_round, [game.id, engine])
     
     t.start()
     session.commit()
 
 
-def calculate_score(curr_round, game, session):
+def calculate_score(curr_round, session):
 
     for guess in curr_round.guesses:
         num_wins = session.query(Play).filter(Play.round == curr_round, Play.winner == guess.user).count()
@@ -148,3 +152,7 @@ def calculate_score(curr_round, game, session):
         session.add(user_points)
     
     session.commit()
+
+def clear_game(game_id, engine):
+    pass
+    #TODO clear game from db

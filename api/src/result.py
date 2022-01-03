@@ -33,6 +33,6 @@ def get_curr_results(auth_user_id, session):
 
     return {
         'results' : results,
-        'game_finished' : game.finished,
+        'game_finished' : game.game_stage == 'F',
         'guessing_started' : len(points) != game.round_num
     }

@@ -18,5 +18,3 @@ class Game(Base):
         round_num = Column(Integer)
 
         card_num = Column(Integer)
-
-        finished = Column(Boolean, default=False)

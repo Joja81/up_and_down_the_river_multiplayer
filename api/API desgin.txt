@@ -200,3 +200,4 @@ Results API calls ("result")
 	Output
 	-results [result]
 	-game_finished
+	-guessing_started
