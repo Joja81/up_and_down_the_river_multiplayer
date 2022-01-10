@@ -45,7 +45,10 @@ def join_game(name, game_code, session):
 
     if game is None:
         raise InputError(description = "Game code is invalid")
-    
+
+    if game.game_stage != "S":
+        raise InputError(description= "Game has already started")
+
     check_name(name, game, session)
 
     # Check that correct num of cards left

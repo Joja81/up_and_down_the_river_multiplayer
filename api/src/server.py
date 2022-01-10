@@ -79,6 +79,8 @@ def start_create_game():
 def start_join_game():
     data = request.get_json()
 
+    print(data)
+
     return json.dumps(join_game(data['name'], data['game_id'], session))
 
 @APP.route("/start/change_num_cards", methods = ["POST"])

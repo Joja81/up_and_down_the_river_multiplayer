@@ -12,6 +12,7 @@ from src.sql_classes.user_class import User
 
 
 def collect_cards(auth_user_id, session):
+    print(auth_user_id)
     user = session.query(User).get(auth_user_id)
     game = user.game
 
