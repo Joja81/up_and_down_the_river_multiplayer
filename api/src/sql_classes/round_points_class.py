@@ -11,7 +11,7 @@ class Round_point(Base):
         points = Column(Integer)
 
         user_id = Column(Integer, ForeignKey("users.id"))
-        user = relationship("User")
+        user = relationship("User", back_populates="round_points")
 
         round_id = Column(Integer, ForeignKey("rounds.id"))
-        round = relationship("Round")
+        round = relationship("Round", back_populates="round_points")

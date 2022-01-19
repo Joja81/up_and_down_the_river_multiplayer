@@ -16,7 +16,7 @@ ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A']
 END_ROUND_WAIT_TIME = 2 #Time until next round starts
 END_GAME_WAIT_TIME = 100 # Time until game is wiped from db
 
-def users_in_game(game, session):
+def users_in_game(game):
     '''Returns a list of names of users in the game'''
 
 

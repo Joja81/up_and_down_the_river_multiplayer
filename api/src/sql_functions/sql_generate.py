@@ -20,28 +20,28 @@ def generate_engine():
     from src.sql_classes.round_points_class import Round_point
 
     # Create relationships
-    User.sessions = relationship("User_session", order_by=User_session.id)
+    User.sessions = relationship("User_session", order_by=User_session.id, back_populates= "user")
     
-    Game.users = relationship("User", order_by=User.id, cascade="all, delete",)
+    Game.users = relationship("User", order_by=User.id, cascade="all, delete", back_populates="game")
 
-    User.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete",)
-    Round.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete",)
-    Game.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete",)
+    User.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete", back_populates="user")
+    Round.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete", back_populates= "round")
+    Game.guesses = relationship("Guess", order_by=Guess.id, cascade="all, delete", back_populates="game")
 
-    Round.hands = relationship("Hand", order_by=Hand.id, cascade="all, delete",)
-    User.hands = relationship("Hand", order_by=Hand.id, cascade="all, delete",)
+    Round.hands = relationship("Hand", order_by=Hand.id, cascade="all, delete", back_populates = "round")
+    User.hands = relationship("Hand", order_by=Hand.id, cascade="all, delete", back_populates = "user")
 
-    Hand.cards = relationship("Card", order_by=Card.id, cascade="all, delete",)
-    Play.cards = relationship("Card", order_by=Card.play_order, cascade="all, delete",)
+    Hand.cards = relationship("Card", order_by=Card.id, cascade="all, delete", back_populates= "hand")
+    Play.cards = relationship("Card", order_by=Card.play_order, cascade="all, delete", back_populates= "play")
 
-    Game.plays = relationship("Play", order_by=Play.id, cascade="all, delete",)
-    Round.plays = relationship("Play", order_by=Play.play_num, cascade="all, delete",)
+    Game.plays = relationship("Play", order_by=Play.id, cascade="all, delete", back_populates= "game")
+    Round.plays = relationship("Play", order_by=Play.play_num, cascade="all, delete", back_populates="round")
 
-    Round.round_points = relationship("Round_point", order_by=Round_point.id, cascade="all, delete",)
-    User.round_points = relationship("Round_point", order_by=Round_point.id, cascade="all, delete",)
+    Round.round_points = relationship("Round_point", order_by=Round_point.id, cascade="all, delete", back_populates="round")
+    User.round_points = relationship("Round_point", order_by=Round_point.id, cascade="all, delete", back_populates= "user")
 
     # Create engine
-    engine = create_engine("sqlite:///up_and_down_the_river.db")
+    engine = create_engine("sqlite:///up_and_down_the_river.db?check_same_thread=False")
     Base.metadata.create_all(engine)
 
     return engine

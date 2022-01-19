@@ -15,4 +15,4 @@ class User(Base):
         play_order = Column(Integer)
 
         game_id = Column(Integer, ForeignKey("games.id"))
-        game = relationship("Game")
+        game = relationship("Game", back_populates="users")

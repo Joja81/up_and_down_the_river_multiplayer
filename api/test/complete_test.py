@@ -1,10 +1,11 @@
 import time
 import json
 import requests
+import pytest
 
 from src import config
 
-
+@pytest.mark.skip(reason="Test takes to long")
 def test_2_card_test():
 
     requests.delete(config.url + "clear")

@@ -36,7 +36,7 @@ def create_new_game(name, session):
         'num_cards' : new_game.max_cards,
         'is_owner' : user.is_owner,
         'game_id' : new_game.id,
-        'user_names' : users_in_game(new_game, session)
+        'user_names' : users_in_game(new_game)
     }
 
 def join_game(name, game_code, session):
@@ -47,6 +47,7 @@ def join_game(name, game_code, session):
         raise InputError(description = "Game code is invalid")
 
     if game.game_stage != "S":
+        print(game.game_stage)
         raise InputError(description= "Game has already started")
 
     check_name(name, game, session)
@@ -71,7 +72,7 @@ def join_game(name, game_code, session):
         'num_cards' : game.max_cards,
         'is_owner' : user.is_owner,
         'game_id' : game.id,
-        'user_names' : users_in_game(game, session)
+        'user_names' : users_in_game(game)
     }
 
 def change_num_cards(auth_user_id, num_cards, session):
@@ -100,7 +101,7 @@ def update_start_screen(auth_user_id, session):
         'num_cards' : game.max_cards,
         'is_owner' : user.is_owner,
         'game_id' : game.id,
-        'user_names' : users_in_game(game, session),
+        'user_names' : users_in_game(game),
         'game_started' : game.game_stage != "S"
     }
 
@@ -128,5 +129,5 @@ def check_name(name, game, session):
         raise InputError(description = "Name too short or too long")
     
     if game != None:
-        if name in users_in_game(game, session):
+        if name in users_in_game(game):
             raise InputError(description = "Name is already being used")

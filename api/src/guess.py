@@ -7,12 +7,12 @@ from src.game import start_play
 from src.sql_classes.guess_class import Guess
 from src.sql_classes.hand_class import Hand
 from src.sql_classes.round_class import Round
+from src.sql_classes.card_class import Card
 
 from src.sql_classes.user_class import User
 
 
 def collect_cards(auth_user_id, session):
-    print(auth_user_id)
     user = session.query(User).get(auth_user_id)
     game = user.game
 
@@ -22,6 +22,8 @@ def collect_cards(auth_user_id, session):
     curr_round = session.query(Round).filter(Round.game == game, Round.round_num == game.round_num).first()
 
     hand = session.query(Hand).filter(Hand.round == curr_round, Hand.user == user).first()
+
+    # all_cards = session.query(Card).filter(Card.round == curr_round,  Card.hand == hand).all()
 
     cards = []
 
@@ -50,7 +52,7 @@ def get_guesses(auth_user_id, session):
 
     guessing_complete = False
     user_guess = False
-    curr_guesser_name = None
+    curr_guesser_name = "Guessing complete"
 
     if game.game_stage == "G":
         curr_player_idx = (game.round_num + len(guesses)) % len(game.users)

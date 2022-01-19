@@ -19,7 +19,7 @@ class Play(Base):
         winner = relationship("User", foreign_keys=winner_id)
 
         round_id = Column(Integer, ForeignKey("rounds.id"))
-        round = relationship("Round")
+        round = relationship("Round", back_populates="plays")
 
         game_id = Column(Integer, ForeignKey("games.id"))
-        game = relationship("Game")
+        game = relationship("Game", back_populates= "plays")

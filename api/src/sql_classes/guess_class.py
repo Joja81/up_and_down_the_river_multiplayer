@@ -10,10 +10,10 @@ class Guess(Base):
     guess = Column(Integer)
 
     user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship("User")
+    user = relationship("User", back_populates="guesses")
 
     round_id = Column(Integer, ForeignKey('rounds.id'))
-    round = relationship('Round')
+    round = relationship('Round', back_populates="guesses")
 
     game_id = Column(Integer, ForeignKey('games.id'))
-    game = relationship('Game')
+    game = relationship('Game', back_populates="guesses")

@@ -14,7 +14,7 @@ def get_curr_cards(auth_user_id, session):
     user = session.query(User).get(auth_user_id)
     game = user.game
 
-    if game.game_stage != "P":
+    if game.game_stage not in ["P", "R", "F"]:
         raise InputError(description="Not in playing stage") 
 
     curr_round = session.query(Round).filter(Round.game == game, Round.round_num == game.round_num).first()
@@ -59,7 +59,7 @@ def get_curr_wins(auth_user_id, session):
     user = session.query(User).get(auth_user_id)
     game = user.game
 
-    if game.game_stage != "P":
+    if game.game_stage not in ["P", "R", "F"]:
         raise InputError(description="Not in playing stage") 
 
     curr_round = session.query(Round).filter(Round.game == game, Round.round_num == game.round_num).first()

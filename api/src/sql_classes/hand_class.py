@@ -9,7 +9,7 @@ class Hand(Base):
         id = Column(Integer, primary_key=True)
 
         round_id = Column(Integer, ForeignKey("rounds.id"))
-        round = relationship("Round")
+        round = relationship("Round", back_populates= "hands")
 
         user_id = Column(Integer, ForeignKey("users.id"))
-        user = relationship("User")
+        user = relationship("User", back_populates= "hands")

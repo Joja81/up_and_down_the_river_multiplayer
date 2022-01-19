@@ -1,5 +1,3 @@
-
-from sqlalchemy.orm.interfaces import SessionExtension
 from src.error import InputError
 from src.sql_classes.round_class import Round
 from src.sql_classes.round_points_class import Round_point

@@ -16,10 +16,10 @@ class Card(Base):
         played = Column(Boolean, default = False)
 
         hand_id = Column(Integer, ForeignKey("hands.id"))
-        hand = relationship("Hand")
+        hand = relationship("Hand", back_populates="cards")
 
         play_id = Column(Integer, ForeignKey("plays.id"))
-        play = relationship("Play")
+        play = relationship("Play", back_populates = "cards")
 
         round_id = Column(Integer, ForeignKey("rounds.id"))
         round = relationship("Round")

@@ -8,6 +8,7 @@ from flask import Flask, request
 from flask_cors import CORS
 from sqlalchemy import engine
 from sqlalchemy.orm.session import Session
+from waitress import serve
 
 from src import config
 from src.guess import collect_cards, get_guesses, give_guess
@@ -17,6 +18,7 @@ from src.sql_functions.base import Base
 from src.sql_functions.sql_generate import generate_engine
 from src.start import change_num_cards, create_new_game, join_game, start_game, update_start_screen
 from src.token import token_check
+import threading
 
 def quit_gracefully(*args):
     '''For coverage'''
@@ -79,8 +81,6 @@ def start_create_game():
 def start_join_game():
     data = request.get_json()
 
-    print(data)
-
     return json.dumps(join_game(data['name'], data['game_id'], session))
 
 @APP.route("/start/change_num_cards", methods = ["POST"])
@@ -114,7 +114,7 @@ def start_start_game():
 @APP.route("/guess/collect_cards", methods = ['GET'])
 def guess_collect_cards():
     token = request.args.get('token')
-
+    
     auth_user_id = token_check(token, session)
 
     return json.dumps(collect_cards(auth_user_id, session))
@@ -180,5 +180,5 @@ def result_get_curr_results():
 
 if __name__ == "__main__":
     signal.signal(signal.SIGINT, quit_gracefully)  # For coverage
-    APP.run(port=config.port, debug=True)  # Do not edit this port
-    engine
+    # APP.run(port=config.port, debug=True)  # Do not edit this port
+    serve(APP, port = config.port, url_scheme='https')

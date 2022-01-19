@@ -110,6 +110,9 @@ def test_join_game_many_players():
     game_id = json.loads(resp.text)['game_id']
 
     for i in range(7):
+        
+        print(game_id)
+        
         resp = requests.post(config.url + "start/join_game",
                             json={
                                 'game_id' : game_id,

@@ -197,7 +197,20 @@ Results API calls ("result")
 	Input
 	- token
 	
-	Output
+  Output
 	-results [result]
 	-game_finished
 	-guessing_started
+
+
+Game calls: Extra calls to help with navigation
+
+- get_curr_location(Get)
+    Input
+    - token
+
+    Output
+    - game_location (String)
+        g = guess
+        p = playing
+        r = results or finished

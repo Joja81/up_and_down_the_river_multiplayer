@@ -26,7 +26,6 @@ def token_check(token, session):
     except BaseException as all_errors:
         raise AccessError(description= "Token is not valid") from all_errors
 
-
     session_data = session.query(User_session).get(data['session_id'])
 
     if session_data == None or session_data.user_id != data['auth_user_id'] :

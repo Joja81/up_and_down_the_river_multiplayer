@@ -7,10 +7,11 @@ part 'guess_class.g.dart';
 /// JSON serialization logic to be generated.
 @JsonSerializable()
 class Guess {
-  String player_name;
-  String player_guess;
-
   Guess(this.player_name, this.player_guess);
+
+  String player_name;
+  int player_guess;
+
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
@@ -22,12 +23,15 @@ class Guess {
   /// helper method `_$UserToJson`.
   Map<String, dynamic> toJson() => _$GuessToJson(this);
 
-  Widget displayGuess() {
-    return Column(
-      children: [
-        Text(player_name),
-        Text(player_guess)
-      ],
+  Widget displayGuess(Map<String, Color> userColors) {
+    return Container(
+      color: userColors[player_name],
+      child: Column(
+        children: [
+          Text(player_name),
+          Text(player_guess.toString())
+        ],
+      ),
     );
   }
 }
