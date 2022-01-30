@@ -31,10 +31,6 @@ def test_get_curr_results_working():
 
     assert resp.status_code == 200
 
-    resp = requests.get(config.url + "result/get_curr_results", params={'token' : user_token})
-
-    assert resp.status_code == 400
-
     resp = requests.post(config.url + "play/give_play", json = {'token' : owner_token, 'play' : cards_1})
 
     assert resp.status_code == 200
@@ -44,7 +40,6 @@ def test_get_curr_results_working():
     data = json.loads(resp.text)
 
     assert not data['game_finished']
-    assert not data['guessing_started']
 
     results = data['results']
 

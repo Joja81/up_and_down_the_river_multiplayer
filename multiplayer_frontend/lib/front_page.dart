@@ -175,6 +175,7 @@ class _StartScreenState extends State<StartScreen> {
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
+      print(e);
       WarningPopups.unknownError(context);
     }
   }

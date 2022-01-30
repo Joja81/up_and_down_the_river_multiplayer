@@ -5,7 +5,7 @@ import pytest
 
 from src import config
 
-@pytest.mark.skip(reason="Test takes to long")
+# @pytest.mark.skip(reason="Test takes to long")
 def test_2_card_test():
 
     requests.delete(config.url + "clear")
@@ -166,7 +166,7 @@ def test_2_card_test():
         if resp.status_code != 200:
             resp = requests.post(config.url + "play/give_play", json = {'token' : user_token, 'play' : cards_2[1]})
             assert resp.status_code == 200
-        
+         
         resp = requests.post(config.url + "play/give_play", json = {'token' : owner_token, 'play' : cards_1[0]})
 
         if resp.status_code != 200:
@@ -193,7 +193,6 @@ def test_2_card_test():
 
     resp = requests.get(config.url + "result/get_curr_results", params={'token' : user_token})
     data = json.loads(resp.text)
-    assert data['guessing_started']
 
     resp = requests.post(config.url + "guess/give_guess", json = {'token' : user_token, 'guess' : 1})
 

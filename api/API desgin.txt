@@ -200,7 +200,6 @@ Results API calls ("result")
   Output
 	-results [result]
 	-game_finished
-	-guessing_started
 
 
 Game calls: Extra calls to help with navigation

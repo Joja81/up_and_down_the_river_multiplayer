@@ -12,8 +12,6 @@ from src import config
 def test_input_error():
     resp = requests.delete(config.url + "clear")
 
-    assert resp.status_code == 200
-
     resp = requests.post(config.url + "start/create_game",
                          json={
                              'name': ""
