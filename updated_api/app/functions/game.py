@@ -140,3 +140,16 @@ def calculate_score(curr_round):
 def clear_game(game_id):
     pass
     #TODO clear game from db
+    
+def get_curr_location(auth_user_id):
+    user = User.query.get(auth_user_id)
+    game = user.game
+    
+    if game.game_stage == 'f':
+        return {
+            'game_location' : 'r'
+        }
+    else:
+        return {
+            'game_location' : game.game_stage
+        }

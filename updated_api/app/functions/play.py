@@ -50,7 +50,8 @@ def get_current_play(auth_user_id):
         'play_num' : play.play_num,
         'curr_user_turn' : play.current_user.name,
         'is_player_turn' : play.current_user == user and play.round_status == "p",
-        'is_finished' : play.round_status != "p"
+        'is_finished' : play.round_status != "p",
+        'round_finished' :  game.game_stage in ["R", "F"]
     }
 
 def get_curr_wins(auth_user_id):

@@ -14,6 +14,7 @@ CurrentPlay _$CurrentPlayFromJson(Map<String, dynamic> json) => CurrentPlay(
       json['curr_user_turn'] as String,
       json['is_player_turn'] as bool,
       json['is_finished'] as bool,
+      json['round_finished'] as bool,
     );
 
 Map<String, dynamic> _$CurrentPlayToJson(CurrentPlay instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$CurrentPlayToJson(CurrentPlay instance) =>
       'curr_user_turn': instance.curr_user_turn,
       'is_player_turn': instance.is_player_turn,
       'is_finished': instance.is_finished,
+      'round_finished': instance.round_finished,
     };

@@ -10,13 +10,14 @@ part 'get_current_play_class.g.dart';
 /// JSON serialization logic to be generated.
 @JsonSerializable()
 class CurrentPlay {
-  CurrentPlay(this.cards, this.play_num, this.curr_user_turn, this.is_player_turn, this.is_finished);
+  CurrentPlay(this.cards, this.play_num, this.curr_user_turn, this.is_player_turn, this.is_finished, this.round_finished);
 
   List<PlayCard> cards;
   int play_num;
   String curr_user_turn;
   bool is_player_turn;
   bool is_finished;
+  bool round_finished;
 
 
   /// A necessary factory constructor for creating a new User instance

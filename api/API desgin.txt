@@ -197,7 +197,7 @@ Results API calls ("result")
 	Input
 	- token
 	
-  Output
+  	Output
 	-results [result]
 	-game_finished
 

@@ -27,7 +27,7 @@ class GuessScreen extends StatefulWidget {
 }
 
 class _GuessScreenState extends State<GuessScreen> {
-  late var token;
+  late String token;
   late Map<String, Color> userColors;
   late Future<CollectCards> cards;
   late GetGuesses guesses;
@@ -49,20 +49,6 @@ class _GuessScreenState extends State<GuessScreen> {
     _updateGuesses();
 
     timer = Timer.periodic(const Duration(seconds: 2), (Timer t) => _updateGuesses());
-  }
-
-  Future<void> _updateGuesses() async {
-
-    GetGuesses newGuesses = await _collectGuesses();
-
-    if (newGuesses.is_guessing_complete) {
-      _shiftToPlay();
-    }
-
-    setState(() {
-      guesses = newGuesses;
-      guessesCollected = true;
-    });
   }
 
   @override
@@ -93,7 +79,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Widget _collectGuess() {
     return guessesCollected && guesses.user_guess ? Column(
       children: [
-        const Text("Input guess"),
+        const SelectableText("Input guess"),
         SizedBox(
           height: 50,
           child: ScrollConfiguration(
@@ -230,6 +216,20 @@ class _GuessScreenState extends State<GuessScreen> {
       WarningPopups.unknownError(context);
       return collectCards();
     }
+  }
+
+  Future<void> _updateGuesses() async {
+
+    GetGuesses newGuesses = await _collectGuesses();
+
+    if (newGuesses.is_guessing_complete) {
+      _shiftToPlay();
+    }
+
+    setState(() {
+      guesses = newGuesses;
+      guessesCollected = true;
+    });
   }
 
   Future<GetGuesses> _collectGuesses() async {

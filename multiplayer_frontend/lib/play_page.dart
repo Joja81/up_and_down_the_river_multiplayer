@@ -1,12 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiplayer_frontend/json%20class/card_class.dart';
 import 'package:multiplayer_frontend/json%20class/collect_cards_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_wins_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_current_play_class.dart';
+import 'package:multiplayer_frontend/results_page.dart';
 import 'package:multiplayer_frontend/warning_popups.dart';
 
 import 'config.dart';
@@ -29,6 +30,8 @@ class PlayScreen extends StatefulWidget {
 }
 
 class _PlayScreenState extends State<PlayScreen> {
+  Timer? timer;
+
   late String token;
   late Map<String, Color> userColors;
   late GetGuesses guesses;
@@ -52,7 +55,7 @@ class _PlayScreenState extends State<PlayScreen> {
 
     loadData();
 
-    // TODO Add timer to update data
+    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) => loadData());
   }
 
   @override
@@ -78,7 +81,6 @@ class _PlayScreenState extends State<PlayScreen> {
                       : Text(
                           "Current player turn: ${currentPlay.curr_user_turn}"),
                   _displayCards(),
-                  IconButton(onPressed: () {loadData();}, icon: Icon(Icons.check)),
                 ],
               )
             : const Center(child: CircularProgressIndicator()),
@@ -92,18 +94,20 @@ class _PlayScreenState extends State<PlayScreen> {
         const Text("Played cards"),
         SizedBox(
           height: 50,
-          child: ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (PlayCard card in currentPlay.cards)
-                Column(
-                  children: [
-                    card.displayCard(),
-                    Text("Card ${currentPlay.cards.indexOf(card) + 1}"),
-                  ],
-                )
-            ],
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (PlayCard card in currentPlay.cards)
+                  Column(
+                    children: [
+                      card.displayCard(),
+                      Text("Card ${currentPlay.cards.indexOf(card) + 1}"),
+                    ],
+                  )
+              ],
+            ),
           ),
         )
       ],
@@ -128,20 +132,22 @@ class _PlayScreenState extends State<PlayScreen> {
         const Text("User cards"),
         SizedBox(
           height: 50,
-          child: ListView(
-            shrinkWrap: true,
-            scrollDirection: Axis.horizontal,
-            children: [
-              for (PlayCard card in userCards.cards)
-                currentPlay.is_player_turn
-                    ? InkWell(
-                        child: card.displayCard(),
-                        onTap: () {
-                          _sendCardSelection(card);
-                        },
-                      )
-                    : card.displayCard()
-            ],
+          child: Center(
+            child: ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: [
+                for (PlayCard card in userCards.cards)
+                  currentPlay.is_player_turn
+                      ? InkWell(
+                          child: card.displayCard(),
+                          onTap: () {
+                            _sendCardSelection(card);
+                          },
+                        )
+                      : card.displayCard()
+              ],
+            ),
           ),
         )
       ],
@@ -153,9 +159,11 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   void loadData() async {
-    loadUserCards();
-    loadCurrPlay();
-    loadCurrWins();
+    await loadCurrPlay();
+    if (currentPlay.round_finished == false){
+      loadUserCards();
+      loadCurrWins();
+    }
   }
 
   Future<void> loadUserCards() async {
@@ -225,7 +233,7 @@ class _PlayScreenState extends State<PlayScreen> {
       currentPlayLoaded = true;
     });
 
-    if (currentPlay.is_finished){
+    if (currentPlay.round_finished){
       _changeToResults();
     }
   }
@@ -269,6 +277,8 @@ class _PlayScreenState extends State<PlayScreen> {
   }
 
   void _changeToResults() {
-    //TODO change to the results page
+    timer?.cancel();
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => ResultsScreen(userColors: userColors, token: token)));
   }
 }

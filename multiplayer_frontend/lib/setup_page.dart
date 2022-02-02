@@ -66,11 +66,12 @@ class _SetupScreenState extends State<SetupScreen> {
             children: [
               const Padding(padding: EdgeInsets.all(10)),
               numSelectDisplay(context),
-              ListView(
-                shrinkWrap: true,
-                children: [
-                  for (String name in players) _playerNameWidget(context, name)
-                ],
+              Expanded(
+                child: ListView(
+                  children: [
+                    for (String name in players) _playerNameWidget(context, name)
+                  ],
+                ),
               )
             ],
           ),

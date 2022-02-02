@@ -5,7 +5,7 @@ from re import I
 import time
 from flask import current_app as app, request
 import json
-from app.functions.game import next_play, prepare_new_round
+from app.functions.game import get_curr_location, next_play, prepare_new_round
 from app.functions.guess import collect_cards, get_guesses, give_guess
 from app.functions.play import get_curr_cards, get_curr_wins, get_current_play, give_play
 from app.functions.result import get_curr_results
@@ -140,3 +140,11 @@ def result_get_curr_results():
     auth_user_id = token_check(token)
 
     return json.dumps(get_curr_results(auth_user_id))
+
+@app.route("/game/get_curr_location", methods = ['GET'])
+def game_get_curr_location():
+    token = request.args.get('token')
+    
+    auth_user_id = token_check(token)
+    
+    return json.dumps(get_curr_location(auth_user_id))
