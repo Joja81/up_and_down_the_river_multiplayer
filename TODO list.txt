@@ -1,6 +1,0 @@
-TODO list:
-
-Add display for scores/guesses to frontend
-Create proper system for end of game
-
-Neaten up card display
