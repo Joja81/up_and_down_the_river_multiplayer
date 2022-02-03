@@ -212,7 +212,7 @@ class _GuessScreenState extends State<GuessScreen> {
         return collectCards();
       }
     } catch (e) {
-      print("error");
+      print(e);
       WarningPopups.unknownError(context);
       return collectCards();
     }

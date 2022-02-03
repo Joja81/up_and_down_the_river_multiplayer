@@ -9,8 +9,9 @@ part 'card_class.g.dart';
 class PlayCard {
   String suit;
   String rank;
+  String player;
 
-  PlayCard(this.suit, this.rank);
+  PlayCard(this.suit, this.rank, this.player);
 
   /// A necessary factory constructor for creating a new User instance
   /// from a map. Pass the map to the generated `_$UserFromJson()` constructor.
@@ -22,13 +23,30 @@ class PlayCard {
   /// helper method `_$UserToJson`.
   Map<String, dynamic> toJson() => _$PlayCardToJson(this);
 
-  displayCard(){
-    return Column(
-      children: [
-        Text(suit),
-        Text(rank),
-      ],
-    );
+  displayCard({Map<String, Color>? userColors}){
+
+    if (userColors != null){
+
+      return Container(
+        color: userColors[player],
+        child: Column(
+          children: [
+            Text(suit),
+            Text(rank),
+            Text(player),
+          ],
+        ),
+      );
+    } else {
+
+      return Column(
+        children: [
+          Text(suit),
+          Text(rank),
+        ],
+      );
+    }
+
   }
 
 }

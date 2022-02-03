@@ -24,10 +24,10 @@ def collect_cards(auth_user_id):
     cards = []
 
     for card in hand.cards:
-        cards.append({'suit' : card.suit, 'rank' : card.rank})
+        cards.append({'suit' : card.suit, 'rank' : card.rank, 'player' : user.name})
         
     
-    trump = {'suit' : curr_round.trump_card_suit, 'rank' : curr_round.trump_card_rank}
+    trump = {'suit' : curr_round.trump_card_suit, 'rank' : curr_round.trump_card_rank, 'player' : 'trump'}
 
     return {'cards' : cards, 'trump' : trump}
 

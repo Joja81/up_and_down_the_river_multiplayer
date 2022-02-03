@@ -23,9 +23,9 @@ def get_curr_cards(auth_user_id):
 
     for card in user_hand.cards:
         if not card.played:
-            curr_cards.append({'suit' : card.suit, 'rank' : card.rank})
+            curr_cards.append({'suit' : card.suit, 'rank' : card.rank, 'player' : user.name})
     
-    trump = {'suit' : curr_round.trump_card_suit, 'rank' : curr_round.trump_card_rank}
+    trump = {'suit' : curr_round.trump_card_suit, 'rank' : curr_round.trump_card_rank, 'player' : "trump"}
 
     return {'cards' : curr_cards, 'trump' : trump}
 
@@ -43,7 +43,7 @@ def get_current_play(auth_user_id):
     cards = []
 
     for card in play.cards:
-        cards.append({'suit' : card.suit, 'rank' : card.rank})
+        cards.append({'suit' : card.suit, 'rank' : card.rank, 'player' : card.hand.user.name})
     
     return {
         'cards' : cards,
@@ -107,7 +107,11 @@ def give_play(auth_user_id, chosen_card):
         played_suit = play.cards[0].suit
 
         highest_played_suit = play.cards[0]
-        highest_played_trump  = None
+        
+        if play.cards[0].suit == curr_round.trump_card_suit:
+            highest_played_trump  = play.cards[0]
+        else:
+            highest_played_trump = None
 
         for played_card in play.cards[1:]:
             if played_card.suit == played_suit:
@@ -131,9 +135,6 @@ def give_play(auth_user_id, chosen_card):
             
             play.round_status = "w"
             play.wait_end = time.time() + NEXT_PLAY_WAIT_TIME
-            
-            # TODO add code that changes db to show time 5 sec in future and say play is waiting for next
-            pass
         else:
             play.round_status = "f"
             end_round(curr_round, game)

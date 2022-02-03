@@ -7,6 +7,8 @@ import 'package:multiplayer_frontend/json%20class/card_class.dart';
 import 'package:multiplayer_frontend/json%20class/collect_cards_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_wins_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_current_play_class.dart';
+import 'package:multiplayer_frontend/json%20class/guess_class.dart';
+import 'package:multiplayer_frontend/json%20class/score_class.dart';
 import 'package:multiplayer_frontend/results_page.dart';
 import 'package:multiplayer_frontend/warning_popups.dart';
 
@@ -72,6 +74,7 @@ class _PlayScreenState extends State<PlayScreen> {
             ? Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  _displayPlayerScores(),
                   _displayTrumpCard(),
                   currentPlay.cards.isNotEmpty
                       ? _displayPlayedCards()
@@ -88,12 +91,51 @@ class _PlayScreenState extends State<PlayScreen> {
     );
   }
 
-  Column _displayPlayedCards() {
+  Widget _displayPlayerScores(){
+    return Column(
+      children: [
+        const Text("Scores and guesses"),
+        SizedBox(
+          height: 50,
+          child: ListView(
+            shrinkWrap: true,
+            scrollDirection: Axis.horizontal,
+            children: [
+              for (Guess guess in guesses.guesses)
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 10),
+                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  color: userColors[guess.player_name],
+                  child: Column(
+                    children: [
+                      Text(guess.player_name),
+                      Text("Score: ${_findPlayerWins(guess.player_name)}"),
+                      Text("Guess: ${guess.player_guess}"),
+                    ],
+                  ),
+                )
+            ],
+          ),
+        )
+      ],
+    );
+  }
+
+  int _findPlayerWins(String name){
+    for (Score score in currentWins.scores){
+      if (score.name == name){
+        return score.score;
+      }
+    }
+    return 0;
+  }
+
+  Widget _displayPlayedCards() {
     return Column(
       children: [
         const Text("Played cards"),
         SizedBox(
-          height: 50,
+          height: 70,
           child: Center(
             child: ListView(
               shrinkWrap: true,
@@ -102,7 +144,7 @@ class _PlayScreenState extends State<PlayScreen> {
                 for (PlayCard card in currentPlay.cards)
                   Column(
                     children: [
-                      card.displayCard(),
+                      card.displayCard(userColors: userColors),
                       Text("Card ${currentPlay.cards.indexOf(card) + 1}"),
                     ],
                   )
