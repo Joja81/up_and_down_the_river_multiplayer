@@ -2,6 +2,8 @@ from os import environ, getcwd, path
 
 port = 8082
 
+url = f"http://localhost:{port}/"
+
 class Config:
     """Set Flask configuration from .env file."""
 
