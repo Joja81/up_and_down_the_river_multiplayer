@@ -162,6 +162,7 @@ class _StartScreenState extends State<StartScreen> {
     final params = {"name": name};
 
     var url = Uri.http(apiURL, "start/create_game");
+    print(url);
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));
