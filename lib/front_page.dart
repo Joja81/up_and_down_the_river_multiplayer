@@ -161,7 +161,7 @@ class _StartScreenState extends State<StartScreen> {
 
     final params = {"name": name};
 
-    var url = Uri.http(apiURL, "start/create_game");
+    var url = Uri.https(apiURL, "start/create_game");
     print(url);
     try {
       http.Response response =
@@ -194,7 +194,7 @@ class _StartScreenState extends State<StartScreen> {
 
     final params = {"game_id": gameCodeInt, "name": name};
 
-    var url = Uri.http(apiURL, "start/join_game");
+    var url = Uri.https(apiURL, "start/join_game");
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));

@@ -97,7 +97,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
   Future<GetCurrResults> resultApi() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "result/get_curr_results", params);
+    var url = Uri.https(apiURL, "result/get_curr_results", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -121,7 +121,7 @@ class _ResultsScreenState extends State<ResultsScreen> {
     //TODO add check if end of game
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "game/get_curr_location", params);
+    var url = Uri.https(apiURL, "game/get_curr_location", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {

@@ -193,7 +193,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Future<CollectCards> collectCards() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "guess/collect_cards", params);
+    var url = Uri.https(apiURL, "guess/collect_cards", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -235,7 +235,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Future<GetGuesses> _collectGuesses() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "guess/get_guesses", params);
+    var url = Uri.https(apiURL, "guess/get_guesses", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -259,7 +259,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Future<void> _sendUserGuess() async {
     final params = {"token": token, "guess": userGuess};
 
-    var url = Uri.http(apiURL, "guess/give_guess");
+    var url = Uri.https(apiURL, "guess/give_guess");
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));

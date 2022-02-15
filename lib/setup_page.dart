@@ -164,7 +164,7 @@ class _SetupScreenState extends State<SetupScreen> {
   Future<int> _apiCallChangeCardNum(int newCardNum) async {
     final params = {"token": token, "num_cards": newCardNum};
 
-    var url = Uri.http(apiURL, "start/change_num_cards");
+    var url = Uri.https(apiURL, "start/change_num_cards");
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));
@@ -193,7 +193,7 @@ class _SetupScreenState extends State<SetupScreen> {
   _updateSetup() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "start/update_start_screen", params);
+    var url = Uri.https(apiURL, "start/update_start_screen", params);
     try {
       http.Response response =
           await http.get(url, headers: jsonHeader);
@@ -251,7 +251,7 @@ class _SetupScreenState extends State<SetupScreen> {
   Future<void> _sendStartCommand() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "start/start_game");
+    var url = Uri.https(apiURL, "start/start_game");
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));

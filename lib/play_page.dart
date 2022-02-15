@@ -219,7 +219,7 @@ class _PlayScreenState extends State<PlayScreen> {
   Future<CollectCards> getUserCards() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "play/get_curr_cards", params);
+    var url = Uri.https(apiURL, "play/get_curr_cards", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -249,7 +249,7 @@ class _PlayScreenState extends State<PlayScreen> {
   Future<CurrentWins> getCurrWins() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "play/get_curr_wins", params);
+    var url = Uri.https(apiURL, "play/get_curr_wins", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -283,7 +283,7 @@ class _PlayScreenState extends State<PlayScreen> {
   Future<CurrentPlay> getCurrentPlay() async {
     final params = {"token": token};
 
-    var url = Uri.http(apiURL, "play/get_current_play", params);
+    var url = Uri.https(apiURL, "play/get_current_play", params);
     try {
       http.Response response = await http.get(url, headers: jsonHeader);
       if (response.statusCode == 200) {
@@ -305,7 +305,7 @@ class _PlayScreenState extends State<PlayScreen> {
   Future<void> _sendCardSelection(PlayCard card) async {
     final params = {"token": token, "play": card.toJson()};
 
-    var url = Uri.http(apiURL, "play/give_play");
+    var url = Uri.https(apiURL, "play/give_play");
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));
