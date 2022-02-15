@@ -1,6 +1,6 @@
 import 'dart:io' show Platform;
 
-String apiURL = getURL();
+String apiURL = "up-and-down-the-river.herokuapp.com";
 
 //"up-and-down-the-river.herokuapp.com"
 
