@@ -207,12 +207,13 @@ class _GuessScreenState extends State<GuessScreen> {
         return returnValue;
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return collectCards();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
       return collectCards();
     }
@@ -243,7 +244,6 @@ class _GuessScreenState extends State<GuessScreen> {
         return GetGuesses.fromJson(responseMap);
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return _collectGuesses();
       }

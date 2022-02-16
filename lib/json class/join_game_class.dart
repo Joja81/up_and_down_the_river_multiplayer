@@ -6,7 +6,7 @@ part 'join_game_class.g.dart';
 /// JSON serialization logic to be generated.
 @JsonSerializable()
 class JoinGame {
-  var token;
+  String token;
   int num_cards;
   bool is_owner;
   int game_id;

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:multiplayer_frontend/guess_page.dart';
@@ -261,7 +262,9 @@ class _SetupScreenState extends State<SetupScreen> {
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
     }
   }

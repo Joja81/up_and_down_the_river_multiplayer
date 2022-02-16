@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -162,7 +163,6 @@ class _StartScreenState extends State<StartScreen> {
     final params = {"name": name};
 
     var url = Uri.https(apiURL, "start/create_game");
-    print(url);
     try {
       http.Response response =
           await http.post(url, headers: jsonHeader, body: json.encode(params));
@@ -176,7 +176,9 @@ class _StartScreenState extends State<StartScreen> {
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
     }
   }
@@ -208,6 +210,9 @@ class _StartScreenState extends State<StartScreen> {
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
     }
   }
