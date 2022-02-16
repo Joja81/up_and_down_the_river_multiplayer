@@ -27,7 +27,7 @@ class _SetupScreenState extends State<SetupScreen> {
   var token = "";
   late List<String> players;
   bool isOwner = false;
-  int gameId = 0;
+  String gameId = "";
   
   Map<String, Color> userColors = {};
   
@@ -66,6 +66,7 @@ class _SetupScreenState extends State<SetupScreen> {
           child: Column(
             children: [
               const Padding(padding: EdgeInsets.all(10)),
+
               numSelectDisplay(context),
               Expanded(
                 child: ListView(
@@ -204,6 +205,9 @@ class _SetupScreenState extends State<SetupScreen> {
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
     }
   }

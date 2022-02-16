@@ -9,7 +9,7 @@ part of 'setup_update_class.dart';
 SetupUpdate _$SetupUpdateFromJson(Map<String, dynamic> json) => SetupUpdate(
       json['num_cards'] as int,
       json['is_owner'] as bool,
-      json['game_id'] as int,
+      json['game_id'] as String,
       (json['user_names'] as List<dynamic>).map((e) => e as String).toList(),
       json['game_started'] as bool,
     );

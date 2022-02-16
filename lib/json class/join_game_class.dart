@@ -9,7 +9,7 @@ class JoinGame {
   String token;
   int num_cards;
   bool is_owner;
-  int game_id;
+  String game_id;
   List<String> user_names;
 
   JoinGame(this.token, this.num_cards, this.is_owner, this.game_id, this.user_names);

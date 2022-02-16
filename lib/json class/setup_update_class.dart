@@ -8,7 +8,7 @@ part 'setup_update_class.g.dart';
 class SetupUpdate {
   int num_cards;
   bool is_owner;
-  int game_id;
+  String game_id;
   List<String> user_names;
   bool game_started;
 
