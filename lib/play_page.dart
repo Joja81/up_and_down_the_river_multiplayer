@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiplayer_frontend/json%20class/card_class.dart';
@@ -103,8 +104,8 @@ class _PlayScreenState extends State<PlayScreen> {
             children: [
               for (Guess guess in guesses.guesses)
                 Container(
-                  margin: EdgeInsets.symmetric(horizontal: 10),
-                  padding: EdgeInsets.symmetric(horizontal: 5),
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 5),
                   color: userColors[guess.player_name],
                   child: Column(
                     children: [
@@ -227,12 +228,13 @@ class _PlayScreenState extends State<PlayScreen> {
         return CollectCards.fromJson(responseMap);
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return getUserCards();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
       return getUserCards();
     }
@@ -257,12 +259,13 @@ class _PlayScreenState extends State<PlayScreen> {
         return CurrentWins.fromJson(responseMap);
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return getCurrWins();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
       return getCurrWins();
     }
@@ -291,12 +294,13 @@ class _PlayScreenState extends State<PlayScreen> {
         return CurrentPlay.fromJson(responseMap);
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return getCurrentPlay();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
       return getCurrentPlay();
     }

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiplayer_frontend/front_page.dart';
@@ -9,7 +9,6 @@ import 'package:multiplayer_frontend/guess_page.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_location_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_results_class.dart';
 import 'package:multiplayer_frontend/warning_popups.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'config.dart';
 import 'json class/result_class.dart';
@@ -123,12 +122,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
         return GetCurrResults.fromJson(responseMap);
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
         return resultApi();
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
       return resultApi();
     }
@@ -154,11 +154,12 @@ class _ResultsScreenState extends State<ResultsScreen> {
         }
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
-        print("error");
         WarningPopups.httpError(response, context);
       }
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       WarningPopups.unknownError(context);
     }
   }
