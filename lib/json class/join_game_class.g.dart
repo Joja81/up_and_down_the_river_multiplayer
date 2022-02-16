@@ -10,7 +10,7 @@ JoinGame _$JoinGameFromJson(Map<String, dynamic> json) => JoinGame(
       json['token'],
       json['num_cards'] as int,
       json['is_owner'] as bool,
-      json['game_id'] as int,
+      json['game_id'] as String,
       (json['user_names'] as List<dynamic>).map((e) => e as String).toList(),
     );
 

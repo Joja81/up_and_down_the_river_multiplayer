@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:multiplayer_frontend/json%20class/join_game_class.dart';
 import 'package:multiplayer_frontend/setup_page.dart';
@@ -96,10 +95,6 @@ class _StartScreenState extends State<StartScreen> {
                           onFieldSubmitted: (String str) {
                             _collectUserName(context);
                           },
-                          keyboardType: TextInputType.number,
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                          ],
                         ),
                       ),
                       IconButton(
@@ -187,14 +182,13 @@ class _StartScreenState extends State<StartScreen> {
     String name = nameController.text;
     name = name.trim();
     String gameCodeString = gameCodeController.text;
-    int gameCodeInt = int.parse(gameCodeString);
 
     if (name.isEmpty){
       WarningPopups.customWarning(context, "A name must be given");
       return;
     }
 
-    final params = {"game_id": gameCodeInt, "name": name};
+    final params = {"game_id": gameCodeString, "name": name};
 
     var url = Uri.https(apiURL, "start/join_game");
     try {
