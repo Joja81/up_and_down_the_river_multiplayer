@@ -4,10 +4,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:multiplayer_frontend/front_page.dart';
 import 'package:multiplayer_frontend/guess_page.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_location_class.dart';
 import 'package:multiplayer_frontend/json%20class/get_curr_results_class.dart';
 import 'package:multiplayer_frontend/warning_popups.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'config.dart';
 import 'json class/result_class.dart';
@@ -39,8 +41,6 @@ class _ResultsScreenState extends State<ResultsScreen> {
     userColors = widget.userColors;
 
     loadResults();
-
-    timer = Timer.periodic(const Duration(seconds: 2), (Timer t) => checkGameLocation());
   }
 
   @override
@@ -81,6 +81,12 @@ class _ResultsScreenState extends State<ResultsScreen> {
                   ],
                 )
               : const Center(child: CircularProgressIndicator()),
+          floatingActionButton: resultsCollected && results.game_finished
+              ? FloatingActionButton(
+                  onPressed: () => shiftToStart(),
+                  child: const Icon(Icons.home),
+                )
+              : Container(),
         ),
         onWillPop: () async => false);
   }
@@ -92,6 +98,18 @@ class _ResultsScreenState extends State<ResultsScreen> {
       results = results;
       resultsCollected = true;
     });
+
+    if (results.game_finished == false) {
+      timer = Timer.periodic(
+          const Duration(seconds: 2), (Timer t) => checkGameLocation());
+    } else {
+      const snackBar = SnackBar(
+        content: Text('Game is finished'),
+        duration: Duration(seconds: 2),
+      );
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+      Future.delayed(const Duration(minutes: 5), () => shiftToStart());
+    }
   }
 
   Future<GetCurrResults> resultApi() async {
@@ -117,7 +135,6 @@ class _ResultsScreenState extends State<ResultsScreen> {
   }
 
   checkGameLocation() async {
-
     //TODO add check if end of game
     final params = {"token": token};
 
@@ -127,10 +144,13 @@ class _ResultsScreenState extends State<ResultsScreen> {
       if (response.statusCode == 200) {
         Map<String, dynamic> responseMap = jsonDecode(response.body.toString());
         GetCurrLocation gameLocation = GetCurrLocation.fromJson(responseMap);
-        if( gameLocation.game_location == "G" ){
+        if (gameLocation.game_location == "G") {
           timer?.cancel();
-          Navigator.push(context,
-              MaterialPageRoute(builder: (context) => GuessScreen(userColors: userColors, token: token)));
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      GuessScreen(userColors: userColors, token: token)));
         }
       } else {
         //TODO Adjust so it's not just gonna loop errors if smth breaks
@@ -141,5 +161,10 @@ class _ResultsScreenState extends State<ResultsScreen> {
       print(e);
       WarningPopups.unknownError(context);
     }
+  }
+
+  shiftToStart() {
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const StartScreen()));
   }
 }
