@@ -79,7 +79,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Widget _collectGuess() {
     return guessesCollected && guesses.user_guess ? Column(
       children: [
-        const SelectableText("Input guess"),
+        SelectableText("Input guess", style: Theme.of(context).textTheme.headline4,),
         SizedBox(
           height: 50,
           child: ScrollConfiguration(
@@ -108,19 +108,24 @@ class _GuessScreenState extends State<GuessScreen> {
 
   Column _displayGuesses() {
     return Column(children: [
-      const Text("Guesses"),
+      Text("Guesses", style: Theme.of(context).textTheme.headline4,),
       guessesCollected
-          ? SizedBox(
-              height: 50,
-              child: ListView(
-                shrinkWrap: true,
-                scrollDirection: Axis.horizontal,
-                children: [
-                  for (Guess guess in guesses.guesses)
-                    guess.displayGuess(userColors)
-                ],
-              ),
-            )
+          ? Column(
+            children: [
+              SizedBox(
+                  height: 50,
+                  child: guesses.guesses.isEmpty ? const Center(child: Text("No guesses entered yet"),) : ListView(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (Guess guess in guesses.guesses)
+                        guess.displayGuess(userColors)
+                    ],
+                  ),
+                ),
+              guesses.user_guess ? Container() : Text("${guesses.current_guesser} is currently guessing!")
+            ],
+          )
           : const SizedBox(
               height: 50,
               child: CircularProgressIndicator(),
@@ -131,7 +136,7 @@ class _GuessScreenState extends State<GuessScreen> {
   Widget _trumpCards() {
     return Column(
       children: [
-        const Text("Trump card:"),
+        Text("Trump card:", style: Theme.of(context).textTheme.headline4,),
         FutureBuilder(
             future: cards,
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -170,8 +175,8 @@ class _GuessScreenState extends State<GuessScreen> {
           return Column(
             children: [
               (collectCardsResponse.cards.length == 1)
-                  ? const Text("User card")
-                  : const Text("User cards"),
+                  ?  Text("User card", style: Theme.of(context).textTheme.headline4,)
+                  :  Text("User cards", style: Theme.of(context).textTheme.headline4,),
               SizedBox(
                 height: 50,
                 child: ListView(
