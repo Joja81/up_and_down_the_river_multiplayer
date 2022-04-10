@@ -22,99 +22,113 @@ class _StartScreenState extends State<StartScreen> {
   final nameController = TextEditingController();
   final gameCodeController = TextEditingController();
 
+  var loading = false;
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           title: const Text("Up and down the river"),
         ),
-        body: Center(
-          child: Column(
+        body: loading ? _showLoading(context) : _showOptions(context)
+
+    );
+  }
+
+  Widget _showLoading(BuildContext context){
+    return const Center(
+      child: CircularProgressIndicator()
+    );
+  }
+
+  Widget _showOptions(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Column(
+            children: [
+              Text(
+                'Create game',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Create game',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        constraints:
-                            const BoxConstraints(minWidth: 100, maxWidth: 300),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            fillColor: Color(0x00000000), //Translucent
-                            border: UnderlineInputBorder(),
-                            labelText: 'Enter your name',
-                          ),
-                          controller: nameController,
-                          onFieldSubmitted: (String str) {
-                            _createGame(context);
-                          },
-                        ),
+                  Container(
+                    constraints:
+                        const BoxConstraints(minWidth: 100, maxWidth: 300),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        fillColor: Color(0x00000000), //Translucent
+                        border: UnderlineInputBorder(),
+                        labelText: 'Enter your name',
                       ),
-                      IconButton(
-                        onPressed: () {
-                          _createGame(context);
-                        },
-                        icon: const Icon(Icons.check),
-                      )
-                    ],
+                      controller: nameController,
+                      onFieldSubmitted: (String str) {
+                        _createGame(context);
+                      },
+                    ),
                   ),
+                  IconButton(
+                    onPressed: () {
+                      _createGame(context);
+                    },
+                    icon: const Icon(Icons.check),
+                  )
                 ],
               ),
-              const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Join game',
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        constraints:
-                            const BoxConstraints(minWidth: 100, maxWidth: 300),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 16),
-                        child: TextFormField(
-                          decoration: const InputDecoration(
-                            fillColor: Color(0x00000000), //Translucent
-                            border: UnderlineInputBorder(),
-                            labelText: 'Enter the game code',
-                          ),
-                          controller: gameCodeController,
-                          onFieldSubmitted: (String str) {
-                            _collectUserName(context);
-                          },
-                        ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          _collectUserName(context);
-                        },
-                        icon: const Icon(Icons.login),
-                      )
-                    ],
-                  ),
-                ],
-              )
             ],
           ),
-        ));
+          const Padding(padding: EdgeInsets.symmetric(vertical: 20)),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                'Join game',
+                style: Theme.of(context).textTheme.headline3,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    constraints:
+                        const BoxConstraints(minWidth: 100, maxWidth: 300),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
+                    child: TextFormField(
+                      decoration: const InputDecoration(
+                        fillColor: Color(0x00000000), //Translucent
+                        border: UnderlineInputBorder(),
+                        labelText: 'Enter the game code',
+                      ),
+                      controller: gameCodeController,
+                      onFieldSubmitted: (String str) {
+                        _collectUserName(context);
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      _collectUserName(context);
+                    },
+                    icon: const Icon(Icons.login),
+                  )
+                ],
+              ),
+            ],
+          )
+        ],
+      ),
+    );
   }
 
   Future<void> _collectUserName(BuildContext context) async {
-
-    if (gameCodeController.text.isEmpty){
+    if (gameCodeController.text.isEmpty) {
       WarningPopups.customWarning(context, "A game code must be given");
     } else {
       showDialog(
@@ -147,10 +161,14 @@ class _StartScreenState extends State<StartScreen> {
   }
 
   void _createGame(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+
     String name = nameController.text;
     name = name.trim();
 
-    if (name.isEmpty){
+    if (name.isEmpty) {
       WarningPopups.customWarning(context, "A name must be given");
       return;
     }
@@ -165,8 +183,12 @@ class _StartScreenState extends State<StartScreen> {
         Map<String, dynamic> responseMap = jsonDecode(response.body.toString());
         JoinGame gameInfo = JoinGame.fromJson(responseMap);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SetupScreen(arguments: gameInfo,)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SetupScreen(
+                      arguments: gameInfo,
+                    )));
       } else {
         WarningPopups.httpError(response, context);
       }
@@ -176,14 +198,22 @@ class _StartScreenState extends State<StartScreen> {
       }
       WarningPopups.unknownError(context);
     }
+
+    setState(() {
+      loading = false;
+    });
   }
 
   void _joinGame(BuildContext context) async {
+    setState(() {
+      loading = true;
+    });
+
     String name = nameController.text;
     name = name.trim();
     String gameCodeString = gameCodeController.text;
 
-    if (name.isEmpty){
+    if (name.isEmpty) {
       WarningPopups.customWarning(context, "A name must be given");
       return;
     }
@@ -198,8 +228,12 @@ class _StartScreenState extends State<StartScreen> {
         Map<String, dynamic> responseMap = jsonDecode(response.body.toString());
         JoinGame gameInfo = JoinGame.fromJson(responseMap);
 
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => SetupScreen(arguments: gameInfo,)));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => SetupScreen(
+                      arguments: gameInfo,
+                    )));
       } else {
         WarningPopups.httpError(response, context);
       }
@@ -209,7 +243,9 @@ class _StartScreenState extends State<StartScreen> {
       }
       WarningPopups.unknownError(context);
     }
+
+    setState(() {
+      loading = false;
+    });
   }
-
-
 }
